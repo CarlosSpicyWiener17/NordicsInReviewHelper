@@ -91,7 +91,7 @@ if __name__ == "__main__":
                 CompetitorNamesReduced = list()
                 for name in CompetitorNames:
                     newName = ''.join(filter(str.isalpha, name))
-                    CompetitorNamesReduced.append(newName)
+                    CompetitorNamesReduced.append(newName.lower())
                 competitorFiles.close()
         print("Completed")
 
