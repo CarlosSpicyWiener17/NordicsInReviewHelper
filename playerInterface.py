@@ -34,9 +34,45 @@ def getLink():
             print("Success")
             return slug
         
-def csvEntrants(slug, key, sorting):
+def csvEntrants(slug, key, sorting, CompetitorNames, CompetitorNamesReduced, hasReferences):
     name, date, entrants = getTournamentEntrants(slug,key)
-    
-    csv = entrantsToCSV(name, date, entrants, sorting)
 
-    return csv
+    if hasReferences:
+        addToReference = list()
+        #Check if the name is in references. Replace as needed
+        replacedEntrants = dict()
+        for tname, entrant in entrants.items():
+            reducedEntrant = ''.join(filter(str.isalpha, tname))
+            hasName = False
+            for i in range(0,len(CompetitorNamesReduced)):
+                if hasName == False and (CompetitorNamesReduced[i] in reducedEntrant):
+                    replacedEntrants.update({CompetitorNames[i]: entrant})
+                    hasName = True
+
+            if hasName == False:
+                print(f"Could not match start.gg name to any in references\nName: {tname}\n\n1: New Person, Add manually\n2: Already exist add manually")
+                choiceSuccess = False
+                while not choiceSuccess:
+                    try:
+                        choice = int(input())
+                    except:
+                        print("Not an integer, try again")
+                    else:
+                        choiceSuccess=True
+                        if choice== 1:
+                            print("Adding new person to reference\nInput their name:")
+                            nameToAdd = input()
+                            replacedEntrants.update({nameToAdd: entrant})
+                            addToReference.append(nameToAdd)
+                        elif choice == 2:
+                            print("Input their name:")
+                            nameToAdd = input()
+                            replacedEntrants.update({nameToAdd: entrant})
+                print("\n\n")
+
+
+    csv = entrantsToCSV(name, date, replacedEntrants, sorting)
+    if hasReferences:
+        return (csv, addToReference)
+    else:
+        return (csv, [])
