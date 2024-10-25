@@ -24,7 +24,7 @@ if __name__ == "__main__":
         CompetitorNamesReduced = list()
         for name in CompetitorNames:
             newName = ''.join(filter(str.isalpha, name))
-            CompetitorNamesReduced.append(newName)
+            CompetitorNamesReduced.append(newName.lower())
         competitorFiles.close()
     #Prompt user for link. Puts the slug in a list
     while not doneSlugs:

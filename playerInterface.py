@@ -45,7 +45,7 @@ def csvEntrants(slug, key, sorting, CompetitorNames, CompetitorNamesReduced, has
             reducedEntrant = ''.join(filter(str.isalpha, tname))
             hasName = False
             for i in range(0,len(CompetitorNamesReduced)):
-                if hasName == False and (CompetitorNamesReduced[i] in reducedEntrant):
+                if hasName == False and (CompetitorNamesReduced[i] in reducedEntrant.lower()):
                     replacedEntrants.update({CompetitorNames[i]: entrant})
                     hasName = True
 
