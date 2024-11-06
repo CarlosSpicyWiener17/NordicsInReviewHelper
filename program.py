@@ -22,8 +22,12 @@ if __name__ == "__main__":
         CompetitorNames = list()
         CompetitorIds = list()
         for name in tempCompetitorNames:
+            if name == "\n":
+                continue
             CompetitorNames.append(name.replace("\n",""))
         for id in tempCompetitorIds:
+            if id == "\n":
+                continue
             CompetitorIds.append(int(id.replace("\n","")))
         CompetitorNamesReduced = list()
         for name in CompetitorNames:
