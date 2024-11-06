@@ -31,7 +31,7 @@ def SPR(seed, placement):
     return seed - placement 
 
 #Filters the json data into easier to work with python data
-def entrantFilter(response: str, infoNeeded: bool):
+def entrantFilter(response, infoNeeded: bool):
     event = response["data"]["event"]
     if infoNeeded:
         try:
@@ -56,11 +56,17 @@ def entrantFilter(response: str, infoNeeded: bool):
     else:
         info = None
     if not event["entrants"]["nodes"][0]["standing"] == None:
-        entrants = {info["name"]: {"Seed" : info["initialSeedNum"],
-                                "Placement" : info["standing"]["placement"]} for info in event["entrants"]["nodes"]}
+        entrants = {info["name"]: {
+            "ID" : info["participants"][0]["user"]["id"],
+            "Seed" : info["initialSeedNum"],
+            "Placement" : info["standing"]["placement"]
+            } for info in event["entrants"]["nodes"]}
     else:
-        entrants = {info["name"]: {"Seed" : info["initialSeedNum"],
-                                "Placement" : 0} for info in event["entrants"]["nodes"]}
+        entrants = {info["name"]: {
+            "ID" : info["id"],
+            "Seed" : info["initialSeedNum"],
+            "Placement" : 0
+            } for info in event["entrants"]["nodes"]}
     return entrants,info
 
 #Calls startgg api for json data, filters and converts to python data

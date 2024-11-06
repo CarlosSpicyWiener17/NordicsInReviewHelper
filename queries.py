@@ -11,7 +11,11 @@ TOURNAMENT_ENTRANTS = """query EventStandings($eventSlug: String!, $page: Int!) 
         totalPages
       }
       nodes {
-          id
+          participants {
+            user {
+              id
+            }
+          }
           name
           initialSeedNum
         	standing {

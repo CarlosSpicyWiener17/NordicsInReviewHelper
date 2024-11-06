@@ -11,21 +11,26 @@ if __name__ == "__main__":
     referenceReminder = list()
     try:
         competitorFiles = open("names.txt","r", encoding="utf-8")
+        idFiles = open("id.txt","r", encoding="utf-8")
     except (IOError, OSError):
         print("Failed to read file")
         print("Continueing without names")
     else:
         hasReferences = True
         tempCompetitorNames = competitorFiles.readlines()
+        tempCompetitorIds = idFiles.readlines()
         CompetitorNames = list()
+        CompetitorIds = list()
         for name in tempCompetitorNames:
             CompetitorNames.append(name.replace("\n",""))
-
+        for id in tempCompetitorIds:
+            CompetitorIds.append(int(id.replace("\n","")))
         CompetitorNamesReduced = list()
         for name in CompetitorNames:
             newName = ''.join(filter(str.isalpha, name))
             CompetitorNamesReduced.append(newName.lower())
         competitorFiles.close()
+        idFiles.close()
     #Prompt user for link. Puts the slug in a list
     while not doneSlugs:
         linkCheck = getLink()
@@ -59,41 +64,52 @@ if __name__ == "__main__":
     #Iterate through all slugs and get all tournament info
     for slug in slugs:
         print("Getting tournament info...")
-        result, addToReferences = csvEntrants(slug, key, sorting, CompetitorNames, CompetitorNamesReduced, hasReferences)
+        result, addToReferences = csvEntrants(slug, key, sorting, CompetitorIds, CompetitorNames, CompetitorNamesReduced, hasReferences)
         entrantText += result
         if addToReferences != []:
             
             #update file with new names for references
             try:
                 competitorFiles = open("names.txt","a", encoding="utf-8")
+                idFiles = open("id.txt", "a", encoding="utf-8")
             except (IOError, OSError):
                 print("Failed to open file")
                 print("Continueing without names")
             else:
-                for name in addToReferences:
-                    competitorFiles.write("\n"+name)
-                    referenceReminder.append(name)
+                for name, id in addToReferences:
+                    try:
+                        competitorFiles.write("\n"+name)
+                        idFiles.write("\n"+ str(id))
+                        referenceReminder.append(name)
+                    except:
+                        print("Name: ", name, "\nId: ", id)
                 competitorFiles.close()
+                idFiles.close()
             
             #Update references
             try:
                 competitorFiles = open("names.txt","r", encoding="utf-8")
+                idFiles = open("id.txt","r", encoding="utf-8")
             except (IOError, OSError):
                 print("Failed to read file")
                 print("Continueing without names")
             else:
                 hasReferences = True
                 tempCompetitorNames = competitorFiles.readlines()
+                tempCompetitorIds = idFiles.readlines()
                 CompetitorNames = list()
+                CompetitorIds = list()
                 for name in tempCompetitorNames:
                     CompetitorNames.append(name.replace("\n",""))
-
+                for id in tempCompetitorIds:
+                    CompetitorIds.append(int(id.replace("\n","")))
                 CompetitorNamesReduced = list()
                 for name in CompetitorNames:
                     newName = ''.join(filter(str.isalpha, name))
                     CompetitorNamesReduced.append(newName.lower())
                 competitorFiles.close()
-        print("Completed")
+                idFiles.close()
+
 
     #Save to file
     try:
